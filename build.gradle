@@ -1,0 +1,24 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'application'
+}
+
+group 'api.guia.cultural'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"     // kotlin stdlib
+    implementation "io.ktor:ktor-server-netty:1.4.0"        // ktor server application
+    implementation "io.ktor:ktor-gson:1.4.0"                // ktor raw to json transform
+    implementation "ch.qos.logback:logback-classic:1.2.3"   // request logs in the console
+}
