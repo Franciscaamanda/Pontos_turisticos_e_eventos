@@ -19,6 +19,10 @@ class UsuarioComumDAO {
     var connection: MongoDBConnection = MongoDBConnection()
     var col: MongoCollection<UsuarioComum> = connection.collection(COL.UsuarioComum)
 
+    fun insert(usuario: UsuarioComum): Boolean {
+        return col.insertOne(usuario).wasAcknowledged()
+    }
+
     fun get(documento: String): UsuarioComum? {
         return col.findOne(UsuarioComum::documento eq documento)
     }
@@ -44,25 +48,25 @@ class UsuarioComumDAO {
 }
 
 
-fun main() {
-    val evento = Evento(
-            "Baile do Senado Federal",
-            "Festa Oficial",
-            "01-02-2020",
-            "8h30",
-            600f,
-            "Senado Federal de Brasília"
-    )
-    val usuario = UsuarioComum(
-            "Gabriel",
-            "111.222.333.45",
-            "01-02-2020",
-            mutableListOf(evento),
-            mutableListOf()
-    )
-
-//    val ans = ItemDAO().insertUsuarioComum(usuario)
-//    println("Insert ok: $ans")
-    val ans = UsuarioComumDAO().delete("111.222.333.45")
-    println(ans)
-}
+//fun main() {
+//    val evento = Evento(
+//            "Baile do Senado Federal",
+//            "Festa Oficial",
+//            "01-02-2020",
+//            "8h30",
+//            600f,
+//            "Senado Federal de Brasília"
+//    )
+//    val usuario = UsuarioComum(
+//            "Gabriel",
+//            "111.222.333.45",
+//            "01-02-2020",
+//            mutableListOf(evento),
+//            mutableListOf()
+//    )
+//
+////    val ans = ItemDAO().insertUsuarioComum(usuario)
+////    println("Insert ok: $ans")
+//    val ans = UsuarioComumDAO().delete("111.222.333.45")
+//    println(ans)
+//}

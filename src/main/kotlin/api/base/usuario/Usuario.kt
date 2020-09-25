@@ -1,34 +1,25 @@
 package api.base.usuario
 
-import api.base.data.DataSerialization
-import api.base.data.Evento
-import api.base.data.UsuarioAnunciante
-import api.base.data.UsuarioComum
+import api.base.dao.UsuarioComumDAO
+import api.base.model.Evento
+import api.base.model.UsuarioAnunciante
+import api.base.model.UsuarioComum
 
 class Usuario{
 
-    private var usuarios= mutableListOf<UsuarioComum>()
-    private var anunciantes= mutableListOf<UsuarioAnunciante>()
+    private var usuarios = mutableListOf<UsuarioComum>()
+    private var anunciantes = mutableListOf<UsuarioAnunciante>()
+    private  var usuarioComumDAO = UsuarioComumDAO()
 
-    fun criarUsuario(nome:String,
-                     CPF:String,
-                     dataNasc:String,
-                     eventosCadastrados:List<Evento>) {
-        val usuario: DataSerialization = usuarios.filter { c ->
-                    c.nome == nome &&
-                    c.CPF == CPF &&
-                    c.dataNasc == dataNasc &&
-                    c.eventosCadastrados == eventosCadastrados} as DataSerialization
-        usuario.usuarioComum(nome, CPF, dataNasc, eventosCadastrados)
+    fun criarUsuario(novoUsuario: UsuarioComum): Boolean {
+        val ansInset = usuarioComumDAO.insert(novoUsuario)
+        return ansInset
     }
-    fun criarUsuario(nome:String,
-                     CNPJ:String,
-                     eventosProprietario:List<Evento>){
-        val anunciante: DataSerialization= anunciantes.filter {c-> c.nome== nome &&
-                    c.CNPJ==CNPJ &&
-                    c.eventosProprietario==eventosProprietario} as DataSerialization
-        anunciante.usuarioAnunciante(nome, CNPJ, eventosProprietario)
+
+    fun criarUsuario(){
+
     }
+
     fun atualizar(){
 
     }
