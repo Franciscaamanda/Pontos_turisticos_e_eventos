@@ -1,5 +1,6 @@
 package api.base.data
 
+
 import com.fasterxml.jackson.databind.jsonschema.JsonSerializableSchema
 
 
