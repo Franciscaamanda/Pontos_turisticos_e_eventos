@@ -1,5 +1,7 @@
+import api.base.evento.Eventos
 import api.base.model.UsuarioAnunciante
 import api.base.model.UsuarioComum
+import api.base.model.evento.Evento
 import api.base.usuario.Usuario
 import io.ktor.application.*
 import io.ktor.features.*
@@ -11,6 +13,7 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 
+var eventos = Eventos()
 
 fun main(){
     embeddedServer(Netty, 8080) {
@@ -30,7 +33,13 @@ fun main(){
 
             // Listar todos próximos eventos cadastrados;
             get("/listar-eventos"){
+                call.respond(eventos)
+            }
 
+            //Criar novo evento
+            post("/criar-evento"){
+                var novo = call.receive<Evento>()
+                eventos.criarevento(novo)
             }
 
             // Criação de perfis de usuários;

@@ -1,7 +1,6 @@
 package api.base.usuario
 
 import api.base.dao.UsuarioComumDAO
-import api.base.model.Evento
 import api.base.model.UsuarioAnunciante
 import api.base.model.UsuarioComum
 

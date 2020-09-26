@@ -1,6 +1,5 @@
 package api.base.dao
 
-import api.base.model.Evento
 import api.base.model.UsuarioComum
 import com.mongodb.client.MongoCollection
 import org.litote.kmongo.*
