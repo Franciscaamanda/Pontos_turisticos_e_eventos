@@ -1,35 +1,39 @@
 package api.base.usuario.cadastro
 
-import api.base.data.Evento
+import api.base.dao.UsuarioAnuncianteDAO
+import api.base.dao.UsuarioComumDAO
+import api.base.model.evento.Evento
 import api.base.usuario.Usuario
 import api.base.usuario.UsuarioAnunciante
-import api.base.usuario.UsuarioComum
+//import api.base.usuario.UsuarioComum
+import api.base.model.UsuarioComum
 
-class Cadastro{
-    private val usuarios= mutableListOf<Usuario>()
+class Cadastro {
+    val usuarioComumDAO = UsuarioComumDAO()
+    val usuarioAnuncianteDAO = UsuarioAnuncianteDAO()
 
-    fun criarUsuario(nome:String, CPF:String,dataNasc:String, eventosCadastrados:List<Evento>){
-        val cadastro= UsuarioComum(nome.toString(), CPF.toString())
-        cadastro.nome= nome
-        cadastro.documento=CPF
-        cadastro.eventos= eventosCadastrados
-        cadastro.dataNasc= dataNasc
-        usuarios.add(cadastro)
+//    fun criarUsuario(nome:String, CPF:String, dataNasc:String, eventosCadastrados:List<Evento>): Boolean{
+//        val cadastro= UsuarioComum(nome.toString(), CPF.toString())
+//        cadastro.nome= nome
+//        cadastro.documento=CPF
+//        cadastro.eventos= eventosCadastrados
+//        cadastro.dataNasc= dataNasc
+//        usuarios.add(cadastro)
+//        return true
+//    }
+
+    fun criarUsuario(novo: UsuarioComum):Boolean {
+        return usuarioComumDAO.insert(novo)
     }
 
-    fun criarUsuario(nome: String,CNPJ:String, eventosProprietario:List<Evento>){
-        val cadastro= UsuarioAnunciante(nome.toString(), CNPJ.toString())
-        cadastro.nome=nome
-        cadastro.documento=CNPJ
-        cadastro.eventos=eventosProprietario
-        usuarios.add(cadastro)
+    fun criarUsuario(novo: api.base.model.UsuarioAnunciante):Boolean {
+        return usuarioAnuncianteDAO.insert(novo)
     }
 
-    fun atualizarComum(perfil:Usuario):String{
-        val pessoa= usuarios.find{it.nome==perfil.nome && it.documento==perfil.documento}
-        return if(pessoa!=null){
-            pessoa.eventos= perfil.eventos?.toMutableList()
-            "Perfil Atualizado com sucesso!!"
-        }else "Usuário inexistente!"
+    fun atualizarComum(perfil: UsuarioComum): Boolean {
+        val pessoa = usuarioComumDAO.get(perfil.documento)
+        return if (pessoa != null) {
+            usuarioComumDAO.update(perfil.documento, perfil)
+        } else false
     }
 }

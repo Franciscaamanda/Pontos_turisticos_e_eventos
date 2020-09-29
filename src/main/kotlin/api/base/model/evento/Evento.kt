@@ -12,11 +12,9 @@ data class Evento (
 ){
     var ingressos = mutableListOf<Ingresso>()
     val organizador: UsuarioAnunciante? = null
-
     fun criaringresso(ingresso: Ingresso){
         ingressos.add(ingresso)
     }
-
 }
 
 /*

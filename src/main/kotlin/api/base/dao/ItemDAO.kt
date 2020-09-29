@@ -1,6 +1,8 @@
 package api.base.dao
 
+import api.base.model.UsuarioAnunciante
 import api.base.model.UsuarioComum
+import api.base.model.evento.Evento
 import com.mongodb.client.MongoCollection
 import org.litote.kmongo.*
 
@@ -16,7 +18,7 @@ enum class COL {
 
 class UsuarioComumDAO {
     var connection: MongoDBConnection = MongoDBConnection()
-    var col: MongoCollection<UsuarioComum> = connection.collection(COL.UsuarioComum)
+    var col: MongoCollection<UsuarioComum> = connection.collectionUsuarioComum(COL.UsuarioComum)
 
     fun insert(usuario: UsuarioComum): Boolean {
         return col.insertOne(usuario).wasAcknowledged()
@@ -46,6 +48,28 @@ class UsuarioComumDAO {
 
 }
 
+class UsuarioAnuncianteDAO {
+    var connection: MongoDBConnection = MongoDBConnection()
+    var col: MongoCollection<UsuarioAnunciante> = connection.collectionUsuarioAnunciante(COL.UsuarioAnunciante)
+
+    fun insert(usuario: UsuarioAnunciante): Boolean {
+        return col.insertOne(usuario).wasAcknowledged()
+    }
+
+    fun get(documento: String): UsuarioAnunciante? {
+        return col.findOne(UsuarioAnunciante::documento eq documento)
+    }
+}
+
+
+class EventoDAO {
+    var connection: MongoDBConnection = MongoDBConnection()
+    var col: MongoCollection<Evento> = connection.collectionEvento(COL.ProximosEventos)
+
+    fun insert(evento: Evento): Boolean {
+        return col.insertOne(evento).wasAcknowledged()
+    }
+}
 
 //fun main() {
 //    val evento = Evento(

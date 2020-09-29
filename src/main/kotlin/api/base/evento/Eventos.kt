@@ -1,12 +1,13 @@
 package api.base.evento
 
+import api.base.dao.EventoDAO
 import api.base.model.evento.Evento
 
+
 class Eventos() {
- var eventos = mutableListOf<Evento>()
+    var eventoDAO = EventoDAO()
 
-    fun criarevento(evento: Evento){
-        eventos.add(evento)
+    fun criarevento(evento: Evento): Boolean{
+        return eventoDAO.insert(evento)
     }
-
 }

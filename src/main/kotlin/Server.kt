@@ -2,7 +2,6 @@ import api.base.evento.Eventos
 import api.base.model.UsuarioAnunciante
 import api.base.model.UsuarioComum
 import api.base.model.evento.Evento
-import api.base.usuario.Usuario
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*
@@ -14,9 +13,9 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import api.base.usuario.cadastro.Cadastro
 
-val pessoa= Cadastro()
-
+val cadastro = Cadastro()
 var eventos = Eventos()
+
 
 fun main(){
     embeddedServer(Netty, 8080) {
@@ -38,39 +37,54 @@ fun main(){
                 call.respond(eventos)
             }
 
-            //Criar novo evento
+            //Criar novo evento;
             post("/criar-evento"){
-                var novo = call.receive<Evento>()
-                eventos.criarevento(novo)
+                // Verificar se o usuário é anunciante;
+                val novo = call.receive<Evento>()
+                val isCreated = eventos.criarevento(novo)
+
+                if(isCreated){
+                    call.respond(HttpStatusCode.Created, "Novo evento criado.")
+                }else{
+                    call.respond(HttpStatusCode.BadRequest, "Erro ao criar o evento.")
+                }
             }
 
-            // Criação de perfis de usuários;
-            route("/criar/usuario"){
-                post("/comum"){
-                    val novo = call.receive<UsuarioComum>()
-                    val usuarioCriado = pessoa.criarUsuario(novo.nome, novo.CPF, novo.dataNasc, novo.eventosCadastrados)
-
-                    if (usuarioCriado){
-                        call.respondText("<h1>Usuário cadastrado com sucesso!</h1>",io.ktor.http.ContentType.Text.Html)
-                    }else{
-                        call.response.status(HttpStatusCode.BadRequest)
-                        call.respondText("<h1>Usuário não cadastrado.</h1>",io.ktor.http.ContentType.Text.Html)
-                    }
+            //Criar novo usuário;
+            post("/criar/usuario/comum"){
+                val novo = call.receive<UsuarioComum>()
+                val usuarioCriado = cadastro.criarUsuario(novo)
+                if (usuarioCriado){
+                    call.respond(HttpStatusCode.Created, "Usuário cadastrado com sucesso!")
+                }else{
+                    call.respond(HttpStatusCode.BadRequest, "Não foi possível criar o usuário.")
                 }
-                post("/anunciante"){
-                    val anunciante = call.receive<UsuarioAnunciante>()
-                    pessoa.criarUsuario(anunciante.nome,anunciante.CNPJ,anunciante.eventosProprietario)
-                    call.respondText("<h1>Anunciante cadastrado com sucesso!!!</h1>",io.ktor.http.ContentType.Text.Html)
+            }
+
+            //Criar usuário anunciante;
+            post("/criar/usuario/anunciante"){
+                val anunciante = call.receive<UsuarioAnunciante>()
+                val usuarioAnunciante = cadastro.criarUsuario(anunciante)
+                if (usuarioAnunciante){
+                    call.respond(HttpStatusCode.Created, "Anunciante cadastrado com sucesso!")
+                }else{
+                    call.respond(HttpStatusCode.BadRequest, "Não foi possível criar o anunciante.")
                 }
             }
 
             // Update informações;
             route("/atualizar"){
                 patch("/perfil"){
-                    val atualizar= call.receive<Usuario>()
-                    val novo= pessoa.atualizarComum(atualizar)
-                    call.respondText("$novo",io.ktor.http.ContentType.Text.Html)
+                    val atualizar = call.receive<UsuarioComum>()
+                    val novo = cadastro.atualizarComum(atualizar)
+
+                    if(novo){
+                        call.respond(HttpStatusCode.OK, "Perfil Atualizado com sucesso!!")
+                    } else{
+                        call.respond(HttpStatusCode.NotFound,"Usuário inexistente!")
+                    }
                 }
+
                 patch("/evento"){
 
                 }
