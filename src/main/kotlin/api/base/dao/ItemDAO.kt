@@ -1,10 +1,12 @@
 package api.base.dao
 
-import api.base.model.UsuarioAnunciante
-import api.base.model.UsuarioComum
+import api.base.model.usuario.UsuarioAnunciante
+import api.base.model.usuario.UsuarioComum
 import api.base.model.evento.Evento
 import com.mongodb.client.MongoCollection
+import com.mongodb.client.MongoIterable
 import org.litote.kmongo.*
+
 
 enum class DATABASE {
     PontosTuristicosEventos,
@@ -15,6 +17,7 @@ enum class COL {
     UsuarioAnunciante,
     ProximosEventos,
 }
+
 
 class UsuarioComumDAO {
     var connection: MongoDBConnection = MongoDBConnection()
@@ -48,6 +51,7 @@ class UsuarioComumDAO {
 
 }
 
+
 class UsuarioAnuncianteDAO {
     var connection: MongoDBConnection = MongoDBConnection()
     var col: MongoCollection<UsuarioAnunciante> = connection.collectionUsuarioAnunciante(COL.UsuarioAnunciante)
@@ -69,27 +73,19 @@ class EventoDAO {
     fun insert(evento: Evento): Boolean {
         return col.insertOne(evento).wasAcknowledged()
     }
+
+    fun getAll(){
+        val result = col.find()
+        val ans = result.forEach { evento: Evento ->
+            Evento(evento.nome, evento.categoria, evento.data, evento.horario, evento.endereco)
+        }
+        return ans
+//        return col.find().forEach{ evento: Evento -> Evento(evento.nome, evento.categoria, evento.data, evento.horario, evento.endereco)}
+    }
 }
 
-//fun main() {
-//    val evento = Evento(
-//            "Baile do Senado Federal",
-//            "Festa Oficial",
-//            "01-02-2020",
-//            "8h30",
-//            600f,
-//            "Senado Federal de Brasília"
-//    )
-//    val usuario = UsuarioComum(
-//            "Gabriel",
-//            "111.222.333.45",
-//            "01-02-2020",
-//            mutableListOf(evento),
-//            mutableListOf()
-//    )
-//
-////    val ans = ItemDAO().insertUsuarioComum(usuario)
-////    println("Insert ok: $ans")
-//    val ans = UsuarioComumDAO().delete("111.222.333.45")
-//    println(ans)
-//}
+
+
+fun main(){
+    println(EventoDAO().getAll())
+}

@@ -1,6 +1,6 @@
 import api.base.evento.Eventos
-import api.base.model.UsuarioAnunciante
-import api.base.model.UsuarioComum
+import api.base.model.usuario.UsuarioAnunciante
+import api.base.model.usuario.UsuarioComum
 import api.base.model.evento.Evento
 import io.ktor.application.*
 import io.ktor.features.*
@@ -11,7 +11,8 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import api.base.usuario.cadastro.Cadastro
+import api.base.cadastro.Cadastro
+import org.litote.kmongo.json
 
 val cadastro = Cadastro()
 var eventos = Eventos()
@@ -25,6 +26,7 @@ fun main(){
                     setPrettyPrinting()
                 }
             }
+
             // Infomações gerais sobre a API;
             get("/info") {
                 call.respondText(
@@ -34,14 +36,15 @@ fun main(){
 
             // Listar todos próximos eventos cadastrados;
             get("/listar-eventos"){
-                call.respond(eventos)
+//                val ans = eventos.listar()
+//                call.respond(ans)
             }
 
             //Criar novo evento;
             post("/criar-evento"){
-                // Verificar se o usuário é anunciante;
+                //TODO: Verificar se o usuário é anunciante;
                 val novo = call.receive<Evento>()
-                val isCreated = eventos.criarevento(novo)
+                val isCreated = eventos.criar(novo)
 
                 if(isCreated){
                     call.respond(HttpStatusCode.Created, "Novo evento criado.")

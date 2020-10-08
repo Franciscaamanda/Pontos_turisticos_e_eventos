@@ -1,4 +1,4 @@
-package api.base.model
+package api.base.model.usuario
 
 import api.base.model.evento.Evento
 

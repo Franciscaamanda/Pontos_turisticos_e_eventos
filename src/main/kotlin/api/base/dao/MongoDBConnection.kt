@@ -1,7 +1,7 @@
 package api.base.dao
 
-import api.base.model.UsuarioAnunciante
-import api.base.model.UsuarioComum
+import api.base.model.usuario.UsuarioAnunciante
+import api.base.model.usuario.UsuarioComum
 import api.base.model.evento.Evento
 import io.github.cdimascio.dotenv.dotenv
 import com.mongodb.client.MongoCollection

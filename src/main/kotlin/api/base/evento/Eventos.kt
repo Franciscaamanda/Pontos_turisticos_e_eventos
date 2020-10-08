@@ -7,7 +7,11 @@ import api.base.model.evento.Evento
 class Eventos() {
     var eventoDAO = EventoDAO()
 
-    fun criarevento(evento: Evento): Boolean{
+    fun criar(evento: Evento): Boolean{
         return eventoDAO.insert(evento)
     }
+
+//    fun listar(): List<Evento> {
+//        return eventoDAO.getAll()
+//    }
 }
