@@ -1,10 +1,13 @@
 package api.base.dao
 
+import api.base.evento.Eventos
 import api.base.model.UsuarioAnunciante
 import api.base.model.UsuarioComum
 import api.base.model.evento.Evento
+import api.base.model.evento.ingresso.Ingresso
 import com.mongodb.client.MongoCollection
 import org.litote.kmongo.*
+import org.litote.kmongo.util.idValue
 
 enum class DATABASE {
     PontosTuristicosEventos,
@@ -69,7 +72,63 @@ class EventoDAO {
     fun insert(evento: Evento): Boolean {
         return col.insertOne(evento).wasAcknowledged()
     }
+
+    fun get(id: Int): Evento? {
+        return col.findOne(Evento::id eq id)
+    }
+
+    fun getall():MongoCollection<Evento>{
+        return col
+    }
+
+    fun update(id: Int, novoEvento: Evento): Boolean {
+        return if(col.findOne( Evento::id eq id)!= null){
+            col.updateOne(novoEvento::id eq id, set(
+                    Evento::nome setTo novoEvento.nome,
+                    Evento::categoria setTo novoEvento.categoria,
+                    Evento::data setTo novoEvento.data,
+                    Evento::horario setTo novoEvento.horario,
+                    Evento::endereco setTo novoEvento.horario,
+                    Evento::tipo setTo novoEvento.tipo
+                )
+            )
+            true
+        }else {
+            false
+        }
+    }
+
+    fun delete(id: Int):Boolean{
+        return if(col.findOne( Evento::id eq id)!= null){
+            col.deleteOne(Evento::id eq id)
+            true
+        }else {
+            false
+        }
+    }
+
+
+//    fun insertingresso(id: Int, ingressos: MutableList<Ingresso>, ingresso: Ingresso): Boolean{
+//        val ans = col.updateOne(
+//            Evento::id eq id,
+//            if(ingresso.valor==0.0) {
+//                set(
+//                    Evento::ingressos setTo ingressos.add(ingresso),
+//                    Evento::tipo setTo "Grátis"
+//                )
+//            }else{
+//                set(
+//                    Evento::ingressos setTo ingressos.add(ingresso)
+//                )
+//            }
+//        )
+//        return ans.wasAcknowledged()
+//    }
+
+//    fun getfree() {}
+
 }
+
 
 //fun main() {
 //    val evento = Evento(

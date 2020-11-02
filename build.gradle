@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.10'
     id 'application'
+    // id 'com.github.johnrengelman.shadow' version '6.0.0' plugin para compilar em um arquivo só (A2)
 }
 
 group 'api.guia.cultural'
