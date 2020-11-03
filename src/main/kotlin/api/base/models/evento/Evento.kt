@@ -1,7 +1,6 @@
-package api.base.model.evento
+package api.base.models.evento
 
-import api.base.model.UsuarioAnunciante
-import api.base.model.evento.ingresso.Ingresso
+import api.base.models.usuarios.UsuarioAnunciante
 
 data class Evento (
     val nome: String,

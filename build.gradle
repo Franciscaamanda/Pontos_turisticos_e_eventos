@@ -18,9 +18,9 @@ compileKotlin {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib"     // kotlin stdlib
-    implementation 'io.ktor:ktor-server-netty:1.4.0'        // ktor server application
+    implementation 'io.ktor:ktor-server-netty:1.4.1'        // ktor server application
     implementation "io.ktor:ktor-gson:1.4.0"                // ktor raw to json transform
     implementation 'ch.qos.logback:logback-classic:1.2.3'   // request logs in the console
-    implementation "org.litote.kmongo:kmongo:4.1.2"         // Kmongo package
+    implementation "org.litote.kmongo:kmongo:4.1.3"         // Kmongo package
     compile 'io.github.cdimascio:dotenv-kotlin:6.0.0'       // To get environments variables
 }

@@ -1,13 +1,24 @@
-package api.base.dao
+package api.base.controllers.database
 
-import api.base.model.UsuarioAnunciante
-import api.base.model.UsuarioComum
-import api.base.model.evento.Evento
+import api.base.models.usuarios.UsuarioAnunciante
+import api.base.models.usuarios.UsuarioComum
+import api.base.models.evento.Evento
 import io.github.cdimascio.dotenv.dotenv
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.*
 
+
+enum class DATABASE {
+    PontosTuristicosEventos,
+}
+
+enum class COL {
+    UsuarioComum,
+    UsuarioAnunciante,
+    Eventos,
+    ProximosEventos,
+}
 
 
 class MongoDBConnection {

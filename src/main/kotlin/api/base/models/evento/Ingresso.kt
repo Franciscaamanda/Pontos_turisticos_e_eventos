@@ -1,6 +1,4 @@
-package api.base.model.evento.ingresso
-
-import java.util.*
+package api.base.models.evento
 
 open class Ingresso {
     val nome: String? = null
