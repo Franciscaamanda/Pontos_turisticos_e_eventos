@@ -25,7 +25,6 @@ fun Application.main() {
     }
 
     routing {
-        trace { application.log.warn(it.buildText()) }
 
         route("/") {
             index()

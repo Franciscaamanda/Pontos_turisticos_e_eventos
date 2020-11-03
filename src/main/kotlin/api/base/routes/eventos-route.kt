@@ -1,5 +1,6 @@
 package api.base.routes
 
+import LOG
 import api.base.Eventos
 import api.base.models.evento.Evento
 import com.google.gson.Gson
@@ -19,9 +20,11 @@ fun Route.eventos() {
         val isCreated = Eventos.criar(novo)
 
         if(isCreated){
+            LOG.info("Novo evento criado.")
             map["Mensagem"] = "Novo evento criado."
             call.respond(HttpStatusCode.Created, gson.toJson(map))
         }else{
+            LOG.info("Erro ao criar o evento.")
             map["Mensagem"] = "Erro ao criar o evento."
             call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
         }
