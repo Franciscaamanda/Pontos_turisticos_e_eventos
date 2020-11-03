@@ -6,7 +6,6 @@ import api.base.routes.eventos
 import api.base.routes.index
 import api.base.routes.usuarioComum
 import api.base.routes.usuarioAnunciante
-import com.google.gson.Gson
 
 import io.ktor.application.*
 import io.ktor.features.*
@@ -26,8 +25,7 @@ fun Application.main() {
     }
 
     routing {
-        val gson = Gson()
-        val map = hashMapOf<String, String>()
+        trace { application.log.warn(it.buildText()) }
 
         route("/") {
             index()

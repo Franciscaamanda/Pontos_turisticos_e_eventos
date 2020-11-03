@@ -19,9 +19,9 @@ class EventoRepo {
     fun getAll(): List<Evento> {
         println("$$$$$####################################################")
 
-        val eventos = mutableListOf<Evento>()
-        col.find().forEach { it -> eventos.add(it)}
+        val eventos = col.find().toList() as MutableList<Evento>
         println(eventos)
+
         println("#########################################################")
         return eventos
     }

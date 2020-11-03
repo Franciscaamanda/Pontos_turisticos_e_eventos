@@ -14,8 +14,8 @@ class Eventos() {
 
     fun atualizar() {}
 
-    fun listar(): String? {
+    fun listar(): List<Evento> {
         val eventos = EventoRepo.getAll()
-        return Gson().toJson(eventos)
+        return eventos
     }
 }

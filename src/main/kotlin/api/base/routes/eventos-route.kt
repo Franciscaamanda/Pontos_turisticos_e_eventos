@@ -28,8 +28,9 @@ fun Route.eventos() {
     }
 
     get(path = "/listar"){
-        val listaEventos = Eventos.listar()
-        call.respond(gson.toJson(listaEventos))
+        val listaEventos: MutableList<Evento> = Eventos.listar() as MutableList<Evento>
+        map["Eventos"] = listaEventos.toString()
+        call.respond(gson.toJson(map))
     }
 
     patch(path = "/atualizar"){
