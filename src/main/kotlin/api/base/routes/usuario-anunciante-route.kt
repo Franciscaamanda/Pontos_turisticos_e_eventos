@@ -1,7 +1,8 @@
 package api.base.routes
 
-import api.base.Cadastro
+import api.base.controllers.usuarios.UsuarioAnuncianteController
 import api.base.models.usuarios.UsuarioAnunciante
+
 import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.*
@@ -16,9 +17,10 @@ fun Route.usuarioAnunciante() {
 
     post(path = "/criar"){
         val anunciante = call.receive<UsuarioAnunciante>()
-        val usuarioAnunciante = Cadastro.criarUsuario(anunciante)
+        val cadatrarAnunciante = UsuarioAnuncianteController(anunciante)
+        val criadoAnunciante = cadatrarAnunciante.criar()
 
-        if (usuarioAnunciante){
+        if (criadoAnunciante){
             map["Mensagem"] = "Anunciante cadastrado com sucesso!"
             call.respond(HttpStatusCode.Created, gson.toJson(map))
         }else{

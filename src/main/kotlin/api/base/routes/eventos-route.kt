@@ -1,8 +1,10 @@
 package api.base.routes
 
 import LOG
-import api.base.Eventos
+import api.base.controllers.evento.EventosController
 import api.base.models.evento.Evento
+import api.base.repository.EventoRepo
+
 import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.*
@@ -16,8 +18,9 @@ fun Route.eventos() {
     val map = hashMapOf<String, String>()
 
     post(path = "/criar"){
-        val novo = call.receive<Evento>()
-        val isCreated = Eventos.criar(novo)
+        val evento = call.receive<Evento>()
+        val novoEvento = EventosController(evento)
+        val isCreated = novoEvento.criar()
 
         if(isCreated){
             LOG.info("Novo evento criado.")
@@ -31,8 +34,8 @@ fun Route.eventos() {
     }
 
     get(path = "/listar"){
-        val listaEventos: MutableList<Evento> = Eventos.listar() as MutableList<Evento>
-        map["Eventos"] = listaEventos.toString()
+        val eventoRepo = EventoRepo()
+        map["Eventos"] = eventoRepo.getAll().toString()
         call.respond(gson.toJson(map))
     }
 

@@ -1,7 +1,5 @@
 package api.base
 
-import api.base.controllers.evento.Eventos
-import api.base.controllers.cadastro.Cadastro
 import api.base.routes.eventos
 import api.base.routes.index
 import api.base.routes.usuarioComum
@@ -13,8 +11,6 @@ import io.ktor.gson.*
 import io.ktor.routing.*
 
 
-val Cadastro = Cadastro()
-var Eventos = Eventos()
 
 
 fun Application.main() {
