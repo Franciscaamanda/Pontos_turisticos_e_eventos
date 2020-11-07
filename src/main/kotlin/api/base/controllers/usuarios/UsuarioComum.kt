@@ -2,15 +2,15 @@ package api.base.controllers.usuarios
 
 import api.base.controllers.cadastro.CadastroUsuarios
 import api.base.models.usuarios.UsuarioComum
-import api.base.repository.UsuarioAnuncianteRepo
+import api.base.repository.UsuarioComumRepo
 
 
 class UsuarioComumController(override val usuario: UsuarioComum) : CadastroUsuarios {
-    val UsuarioComumRepo = UsuarioAnuncianteRepo()
+    val UsuarioComumRepo = UsuarioComumRepo()
 
     override fun criar(): Boolean {
-        val novoAnunciante = usuario
-        return UsuarioComumRepo.insert(novoAnunciante)
+        val novoComum = usuario
+        return UsuarioComumRepo.insert(novoComum)
     }
 
     override fun atualizar(): Boolean {
