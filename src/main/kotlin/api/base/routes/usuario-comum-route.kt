@@ -39,4 +39,17 @@ fun Route.usuarioComum() {
             call.respond(HttpStatusCode.NotFound, gson.toJson(map))
         }
     }
+
+    delete(path = "/excluir"){
+        val excluir = call.receive<UsuarioComum>()
+        val usuario = Cadastro.deletarComum(excluir)
+
+        if(usuario){
+            map["Mensagem"] = "Usuário deletado com sucesso!!"
+            call.respond(HttpStatusCode.OK, gson.toJson(map))
+        }else{
+            map["Mensagem"] = "Usuário inexistente!"
+            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+        }
+    }
 }

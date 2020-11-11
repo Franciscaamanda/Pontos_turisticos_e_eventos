@@ -56,8 +56,8 @@ class UsuarioAnuncianteRepo: BaseRepoUsuarios {
         novoUsuario as UsuarioAnunciante
         val ans = col.updateOne(novoUsuario::documento eq documento,
             set(
-                UsuarioComum::nome setTo novoUsuario.nome,
-                UsuarioComum::dataNasc setTo novoUsuario.eventosProprietario
+                UsuarioAnunciante::nome setTo novoUsuario.nome,
+                UsuarioAnunciante::eventosProprietario setTo novoUsuario.eventosProprietario
             )
         )
         return ans.wasAcknowledged()
