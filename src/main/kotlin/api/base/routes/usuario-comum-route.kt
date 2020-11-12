@@ -1,7 +1,8 @@
 package api.base.routes
 
-import api.base.Cadastro
+import api.base.controllers.usuarios.UsuarioComumController
 import api.base.models.usuarios.UsuarioComum
+
 import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.*
@@ -15,10 +16,11 @@ fun Route.usuarioComum() {
     val map = hashMapOf<String, String>()
 
     post(path = "/criar"){
-        val novo = call.receive<UsuarioComum>()
-        val usuarioCriado = Cadastro.criarUsuario(novo)
+        val comum = call.receive<UsuarioComum>()
+        val cadastrarComum = UsuarioComumController(comum)
+        val criadoComum = cadastrarComum.criar()
 
-        if (usuarioCriado){
+        if (criadoComum){
             map["Mensagem"] = "Usuário cadastrado com sucesso!"
             call.respond(HttpStatusCode.Created, gson.toJson(map))
         }else{
@@ -28,10 +30,11 @@ fun Route.usuarioComum() {
     }
 
     patch(path = "/atualizar"){
-        val atualizar = call.receive<UsuarioComum>()
-        val novo = Cadastro.atualizarComum(atualizar)
+        val dadosAtualizados = call.receive<UsuarioComum>()
+        val perfilComum = UsuarioComumController(dadosAtualizados)
+        val estaAtualizado = perfilComum.atualizar()
 
-        if(novo){
+        if(estaAtualizado){
             map["Mensagem"] = "Perfil Atualizado com sucesso!!"
             call.respond(HttpStatusCode.OK, gson.toJson(map))
         } else{
@@ -42,7 +45,8 @@ fun Route.usuarioComum() {
 
     delete(path = "/excluir"){
         val excluir = call.receive<UsuarioComum>()
-        val usuario = Cadastro.deletarComum(excluir)
+        val pessoa = UsuarioComumController(excluir)
+        val usuario = pessoa.deletar()
 
         if(usuario){
             map["Mensagem"] = "Usuário deletado com sucesso!!"

@@ -1,14 +1,13 @@
 package api.base.repository
 
-import api.base.models.evento.Evento
+import api.base.controllers.database.EventoConnection
 import api.base.controllers.database.COL
-import api.base.controllers.database.MongoDBConnection
-import com.mongodb.client.MongoCollection
+import api.base.models.evento.Evento
 
 
 class EventoRepo {
-    var connection: MongoDBConnection = MongoDBConnection()
-    var col: MongoCollection<Evento> = connection.collectionEvento(COL.ProximosEventos)
+    private var connection = EventoConnection()
+    private var col = connection.getCollection(COL.ProximosEventos)
 
     fun insert(evento: Evento): Boolean {
         return col.insertOne(evento).wasAcknowledged()
@@ -20,7 +19,7 @@ class EventoRepo {
         println("$$$$$####################################################")
 
         val eventos = col.find().toList() as MutableList<Evento>
-        println(eventos)
+        println("ERROR:\n$eventos\n\n")
 
         println("#########################################################")
         return eventos

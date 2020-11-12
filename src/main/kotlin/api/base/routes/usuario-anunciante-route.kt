@@ -1,14 +1,22 @@
 package api.base.routes
 
-import api.base.Cadastro
+import LOG
+import api.base.controllers.cadastro.Cadastro
+import api.base.controllers.cadastro.CadastroUsuarios
+import api.base.controllers.database.COL
+import api.base.controllers.database.UsuarioAnuncianteConnection
+import api.base.controllers.usuarios.UsuarioAnuncianteController
 import api.base.models.usuarios.UsuarioAnunciante
 import api.base.models.usuarios.UsuarioComum
+
 import com.google.gson.Gson
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.litote.kmongo.eq
+import org.litote.kmongo.findOne
 
 
 fun Route.usuarioAnunciante() {
@@ -17,9 +25,10 @@ fun Route.usuarioAnunciante() {
 
     post(path = "/criar"){
         val anunciante = call.receive<UsuarioAnunciante>()
-        val usuarioAnunciante = Cadastro.criarUsuario(anunciante)
+        val cadatrarAnunciante = UsuarioAnuncianteController(anunciante)
+        val criadoAnunciante = cadatrarAnunciante.criar()
 
-        if (usuarioAnunciante){
+        if (criadoAnunciante){
             map["Mensagem"] = "Anunciante cadastrado com sucesso!"
             call.respond(HttpStatusCode.Created, gson.toJson(map))
         }else{
@@ -30,7 +39,8 @@ fun Route.usuarioAnunciante() {
 
     patch(path = "/atualizar"){
         val atualizar = call.receive<UsuarioAnunciante>()
-        val novo = Cadastro.atualizarAnunciante(atualizar)
+        val pessoa = UsuarioAnuncianteController(atualizar)
+        val novo = pessoa.atualizar()
 
         if(novo){
             map["Mensagem"] = "Perfil Atualizado com sucesso!!"
@@ -43,7 +53,8 @@ fun Route.usuarioAnunciante() {
 
     delete(path = "/excluir"){
         val excluir = call.receive<UsuarioAnunciante>()
-        val usuario = Cadastro.deletarAnunciante(excluir)
+        val pessoa = UsuarioAnuncianteController(excluir)
+        val usuario = pessoa.deletar()
 
         if(usuario){
             map["Mensagem"] = "Usuário deletado com sucesso!!"
@@ -52,5 +63,9 @@ fun Route.usuarioAnunciante() {
             map["Mensagem"] = "Usuário inexistente!"
             call.respond(HttpStatusCode.NotFound, gson.toJson(map))
         }
+    }
+
+    get (path= "/{document}"){
+        var document = call.parameters.get("document")
     }
 }

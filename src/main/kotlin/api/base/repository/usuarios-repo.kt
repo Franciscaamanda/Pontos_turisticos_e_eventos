@@ -1,17 +1,18 @@
 package api.base.repository
 
+import LOG
 import api.base.controllers.database.COL
-import api.base.controllers.database.MongoDBConnection
-import api.base.models.usuarios.Usuario
+import api.base.controllers.database.UsuarioAnuncianteConnection
+import api.base.controllers.database.UsuarioComumConnection
 import api.base.models.usuarios.UsuarioAnunciante
 import api.base.models.usuarios.UsuarioComum
-import com.mongodb.client.MongoCollection
+import api.base.models.usuarios.Usuario
 import org.litote.kmongo.*
 
 
 class UsuarioComumRepo: BaseRepoUsuarios {
-    var connection: MongoDBConnection = MongoDBConnection()
-    var col: MongoCollection<UsuarioComum> = connection.collectionUsuarioComum(COL.UsuarioComum)
+    var connection = UsuarioComumConnection()
+    var col = connection.getCollection(COL.UsuarioComum)
 
     override fun insert(usuario: Usuario): Boolean {
         return col.insertOne(usuario as UsuarioComum).wasAcknowledged()
@@ -41,8 +42,8 @@ class UsuarioComumRepo: BaseRepoUsuarios {
 
 
 class UsuarioAnuncianteRepo: BaseRepoUsuarios {
-    var connection: MongoDBConnection = MongoDBConnection()
-    var col: MongoCollection<UsuarioAnunciante> = connection.collectionUsuarioAnunciante(COL.UsuarioAnunciante)
+    var connection = UsuarioAnuncianteConnection()
+    var col = connection.getCollection(COL.UsuarioAnunciante)
 
     override fun insert(usuario: Usuario): Boolean {
         return col.insertOne(usuario as UsuarioAnunciante).wasAcknowledged()
@@ -54,7 +55,7 @@ class UsuarioAnuncianteRepo: BaseRepoUsuarios {
 
     override fun update(documento: String, novoUsuario: Usuario): Boolean {
         novoUsuario as UsuarioAnunciante
-        val ans = col.updateOne(novoUsuario::documento eq documento,
+        val ans = col.updateOne(UsuarioAnunciante::documento eq documento,
             set(
                 UsuarioAnunciante::nome setTo novoUsuario.nome,
                 UsuarioAnunciante::eventosProprietario setTo novoUsuario.eventosProprietario

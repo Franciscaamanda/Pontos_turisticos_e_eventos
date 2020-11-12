@@ -1,21 +1,26 @@
 package api.base.controllers.evento
 
+import api.base.controllers.cadastro.CadastroEventos
 import api.base.repository.EventoRepo
 import api.base.models.evento.Evento
-import com.google.gson.Gson
 
 
-class Eventos() {
+class EventosController(override val evento: Evento): CadastroEventos {
     var EventoRepo = EventoRepo()
 
-    fun criar(evento: Evento): Boolean{
+    override fun criar(): Boolean{
         return EventoRepo.insert(evento)
     }
 
-    fun atualizar() {}
+    override fun atualizar(): Boolean {
+        TODO("Not yet implemented")
+    }
 
-    fun listar(): List<Evento> {
-        val eventos = EventoRepo.getAll()
-        return eventos
+    override fun encontar(): List<Any> {
+        TODO("Not yet implemented")
+    }
+
+    override fun deletar(): Boolean {
+        TODO("Not yet implemented")
     }
 }
