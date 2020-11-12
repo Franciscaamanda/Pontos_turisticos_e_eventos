@@ -1,6 +1,6 @@
 package api.base.routes
 
-import api.base.controllers.usuarios.UsuarioComumController
+import api.base.controllers.usuarios.CtrlUsuarioComum
 import api.base.models.usuarios.UsuarioComum
 
 import com.google.gson.Gson
@@ -17,7 +17,7 @@ fun Route.usuarioComum() {
 
     post(path = "/criar"){
         val comum = call.receive<UsuarioComum>()
-        val cadastrarComum = UsuarioComumController(comum)
+        val cadastrarComum = CtrlUsuarioComum(comum)
         val criadoComum = cadastrarComum.criar()
 
         if (criadoComum){
@@ -31,7 +31,7 @@ fun Route.usuarioComum() {
 
     patch(path = "/atualizar"){
         val dadosAtualizados = call.receive<UsuarioComum>()
-        val perfilComum = UsuarioComumController(dadosAtualizados)
+        val perfilComum = CtrlUsuarioComum(dadosAtualizados)
         val estaAtualizado = perfilComum.atualizar()
 
         if(estaAtualizado){

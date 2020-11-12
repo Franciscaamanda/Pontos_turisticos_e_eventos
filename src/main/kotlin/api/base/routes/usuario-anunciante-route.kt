@@ -1,6 +1,6 @@
 package api.base.routes
 
-import api.base.controllers.usuarios.UsuarioAnuncianteController
+import api.base.controllers.usuarios.CtrlUsuarioAnunciante
 import api.base.models.usuarios.UsuarioAnunciante
 
 import com.google.gson.Gson
@@ -17,7 +17,7 @@ fun Route.usuarioAnunciante() {
 
     post(path = "/criar"){
         val anunciante = call.receive<UsuarioAnunciante>()
-        val cadatrarAnunciante = UsuarioAnuncianteController(anunciante)
+        val cadatrarAnunciante = CtrlUsuarioAnunciante(anunciante)
         val criadoAnunciante = cadatrarAnunciante.criar()
 
         if (criadoAnunciante){

@@ -4,15 +4,11 @@ import api.base.models.usuarios.UsuarioAnunciante
 
 
 data class Evento (
-    val nome: String,
-    val categoria: String,
-    val data: String,
-    val horario: String,
-    val endereco: String,
-){
-    var ingressos = mutableListOf<Ingresso>()
-    val organizador: UsuarioAnunciante? = null
-    fun criarIngresso(ingresso: Ingresso){
-        ingressos.add(ingresso)
-    }
-}
+        val nome: String,
+        var organizador: UsuarioAnunciante? = null,
+        val categoria: String,
+        val data: String,
+        val horario: String,
+        val endereco: String,
+        val ingressosVendidos: MutableList<Ingresso>? = mutableListOf(),
+)
