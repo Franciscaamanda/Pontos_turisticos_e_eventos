@@ -1,11 +1,14 @@
 package api.base.routes
 
+
 import LOG
 import api.base.controllers.cadastro.Cadastro
 import api.base.controllers.cadastro.CadastroUsuarios
-import api.base.controllers.database.COL
-import api.base.controllers.database.UsuarioAnuncianteConnection
-import api.base.controllers.usuarios.UsuarioAnuncianteController
+//import api.base.controllers.database.COL
+//import api.base.controllers.database.UsuarioAnuncianteConnection
+//import api.base.controllers.usuarios.UsuarioAnuncianteController
+import api.base.controllers.usuarios.CtrlUsuarioAnunciante
+
 import api.base.models.usuarios.UsuarioAnunciante
 import api.base.models.usuarios.UsuarioComum
 
@@ -25,7 +28,7 @@ fun Route.usuarioAnunciante() {
 
     post(path = "/criar"){
         val anunciante = call.receive<UsuarioAnunciante>()
-        val cadatrarAnunciante = UsuarioAnuncianteController(anunciante)
+        val cadatrarAnunciante = CtrlUsuarioAnunciante(anunciante)
         val criadoAnunciante = cadatrarAnunciante.criar()
 
         if (criadoAnunciante){
@@ -39,21 +42,21 @@ fun Route.usuarioAnunciante() {
 
     patch(path = "/atualizar"){
         val atualizar = call.receive<UsuarioAnunciante>()
-        val pessoa = UsuarioAnuncianteController(atualizar)
+        val pessoa = CtrlUsuarioAnunciante(atualizar)
         val novo = pessoa.atualizar()
 
         if(novo){
             map["Mensagem"] = "Perfil Atualizado com sucesso!!"
             call.respond(HttpStatusCode.OK, gson.toJson(map))
         } else{
-            map["Mensagem"] = "Usuário inexistente!"
+            map["Mensagem"] = "Não foi possível atualizar informações de usuário!"
             call.respond(HttpStatusCode.NotFound, gson.toJson(map))
         }
     }
 
     delete(path = "/excluir"){
         val excluir = call.receive<UsuarioAnunciante>()
-        val pessoa = UsuarioAnuncianteController(excluir)
+        val pessoa = CtrlUsuarioAnunciante(excluir)
         val usuario = pessoa.deletar()
 
         if(usuario){
@@ -65,7 +68,25 @@ fun Route.usuarioAnunciante() {
         }
     }
 
-    get (path= "/{document}"){
-        var document = call.parameters.get("document")
+    get (path= "/encontrar"){
+        var usuario = call.receive<UsuarioAnunciante>()
+        val pessoa = CtrlUsuarioAnunciante(usuario).encontar()
+        if(pessoa != null){
+            call.respond(HttpStatusCode.OK, gson.toJson(pessoa))
+        }else{
+            map["Mensagem"] = "Usuário inexistente!"
+            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+        }
+    }
+    get (path = "/listar" ){
+        val anunciante = UsuarioAnunciante("","")
+        val lista = CtrlUsuarioAnunciante(anunciante).listar()
+
+        if(lista != null){
+            call.respond(HttpStatusCode.OK, gson.toJson(lista))
+            return@get
+        }
+        map["Mensagem"] = "Nenhum usuário no momento"
+        call.respond(HttpStatusCode.NotFound, gson.toJson(map))
     }
 }

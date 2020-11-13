@@ -1,31 +1,19 @@
-package api.base.controllers.database
+package api.base.repository.database.mongodb
 
-import io.github.cdimascio.dotenv.dotenv
-import com.mongodb.client.MongoDatabase
 import org.litote.kmongo.*
+import api.base.repository.database.*
+import com.mongodb.client.MongoClient
+import com.mongodb.client.MongoDatabase
+import io.github.cdimascio.dotenv.dotenv
 
 
-enum class DATABASE {
-    PontosTuristicosEventos,
-}
+interface MongoDBConnection: IDatabaseConn {
+    private val client: MongoClient
+        get() = KMongo.createClient(connectionString = dotenv().get("MONGODB"))
 
-enum class COL {
-    UsuarioComum,
-    UsuarioAnunciante,
-    EventosPassados,
-    ProximosEventos,
-}
-
-
-abstract class MongoDBConnection {
-    private val client = KMongo.createClient(connectionString = dotenv().get("MONGODB"))
-
-    private fun database(database: DATABASE = DATABASE.PontosTuristicosEventos): MongoDatabase {
+    override fun connect(): MongoDatabase {
+        val database = DATABASE.PontosTuristicosEventos
         return client.getDatabase(database.name)
-    }
-
-    fun getDatabase(): MongoDatabase {
-        return database()
     }
 }
 

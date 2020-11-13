@@ -2,15 +2,16 @@ package api.base.controllers.usuarios
 
 import api.base.controllers.cadastro.CadastroUsuarios
 import api.base.models.usuarios.UsuarioComum
-import api.base.repository.UsuarioComumRepo
+import api.base.repository.RepoUsuarioComum
+
 
 
 class UsuarioComumController(override val usuario: UsuarioComum) : CadastroUsuarios {
-    val UsuarioComumRepo = UsuarioComumRepo()
+    val UsuarioComumRepo = RepoUsuarioComum()
 
     override fun criar(): Boolean {
         val novoComum = usuario
-        return UsuarioComumRepo.insert(novoComum)
+        return UsuarioComumRepo.add(novoComum)
     }
 
     override fun atualizar(): Boolean {
@@ -28,5 +29,9 @@ class UsuarioComumController(override val usuario: UsuarioComum) : CadastroUsuar
         return if(pessoa != null){
             UsuarioComumRepo.delete(deletar.documento)
         } else false
+    }
+
+    override fun listar(): MutableList<*> {
+        TODO("Not yet implemented")
     }
 }

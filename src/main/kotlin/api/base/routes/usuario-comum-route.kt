@@ -1,6 +1,8 @@
 package api.base.routes
 
-import api.base.controllers.usuarios.UsuarioComumController
+import api.base.controllers.usuarios.CtrlUsuarioAnunciante
+import api.base.controllers.usuarios.CtrlUsuarioComum
+import api.base.models.usuarios.UsuarioAnunciante
 import api.base.models.usuarios.UsuarioComum
 
 import com.google.gson.Gson
@@ -17,7 +19,7 @@ fun Route.usuarioComum() {
 
     post(path = "/criar"){
         val comum = call.receive<UsuarioComum>()
-        val cadastrarComum = UsuarioComumController(comum)
+        val cadastrarComum = CtrlUsuarioComum(comum)
         val criadoComum = cadastrarComum.criar()
 
         if (criadoComum){
@@ -31,24 +33,27 @@ fun Route.usuarioComum() {
 
     patch(path = "/atualizar"){
         val dadosAtualizados = call.receive<UsuarioComum>()
-        val perfilComum = UsuarioComumController(dadosAtualizados)
-        val estaAtualizado = perfilComum.atualizar()
+        val perfilComum = CtrlUsuarioComum(dadosAtualizados)
 
-        if(estaAtualizado){
+        if(perfilComum.encontar() == null){
+            map["Mensagem"] = "Usuário não encontrado"
+            call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
+        }
+
+        if(perfilComum.atualizar()){
             map["Mensagem"] = "Perfil Atualizado com sucesso!!"
             call.respond(HttpStatusCode.OK, gson.toJson(map))
         } else{
-            map["Mensagem"] = "Usuário inexistente!"
+            map["Mensagem"] = "Não foi possível atualizar informações de usuário!"
             call.respond(HttpStatusCode.NotFound, gson.toJson(map))
         }
     }
 
     delete(path = "/excluir"){
         val excluir = call.receive<UsuarioComum>()
-        val pessoa = UsuarioComumController(excluir)
-        val usuario = pessoa.deletar()
+        val pessoa = CtrlUsuarioComum(excluir)
 
-        if(usuario){
+        if(pessoa.deletar()){
             map["Mensagem"] = "Usuário deletado com sucesso!!"
             call.respond(HttpStatusCode.OK, gson.toJson(map))
         }else{
@@ -56,4 +61,26 @@ fun Route.usuarioComum() {
             call.respond(HttpStatusCode.NotFound, gson.toJson(map))
         }
     }
+    get (path= "/encontrar"){
+        var usuario = call.receive<UsuarioComum>()
+        val pessoa = CtrlUsuarioComum(usuario).encontar()
+        if(pessoa != null){
+            call.respond(HttpStatusCode.OK, gson.toJson(pessoa))
+        }else{
+            map["Mensagem"] = "Usuário inexistente!"
+            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+        }
+    }
+    get (path = "/listar" ){
+        val comum = UsuarioComum("","")
+        val lista = CtrlUsuarioComum(comum).listar()
+
+        if(lista != null){
+            call.respond(HttpStatusCode.OK, gson.toJson(lista))
+            return@get
+        }
+        map["Mensagem"] = "Nenhum usuário no momento"
+        call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+    }
+
 }
