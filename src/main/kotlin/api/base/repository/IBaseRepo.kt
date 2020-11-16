@@ -25,8 +25,8 @@ interface IRepoUsuarioAnunciante {
 
 interface IRepoEventos {
     fun add(evento: Evento): Boolean
-    fun get() {}
+    fun get(id:Int):Evento?
     fun list(): MutableList<*>
-    fun update() {}
-    fun delete() {}
+    fun update(id: Int, novoEvento: Evento): Boolean
+    fun delete(id: Int):Boolean
 }

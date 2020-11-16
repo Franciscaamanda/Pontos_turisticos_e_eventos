@@ -3,6 +3,11 @@ package api.base.repository
 import api.base.models.evento.Evento
 import api.base.repository.database.COL
 import api.base.repository.database.mongodb.IColEvento
+import com.mongodb.client.MongoCollection
+import org.litote.kmongo.eq
+import org.litote.kmongo.findOne
+import org.litote.kmongo.set
+import org.litote.kmongo.setTo
 
 
 class RepoEvento: IRepoEventos, IColEvento {
@@ -12,8 +17,8 @@ class RepoEvento: IRepoEventos, IColEvento {
         return col.insertOne(evento).wasAcknowledged()
     }
 
-    override fun get() {
-        super.get()
+    override fun get(id: Int):Evento? {
+        return col.findOne(Evento::id eq id)
     }
 
     override fun list(): MutableList<Evento> {
@@ -32,11 +37,27 @@ class RepoEvento: IRepoEventos, IColEvento {
         return todosEventos
     }
 
-    override fun update() {
-        super.update()
+    override fun update(id: Int, novoEvento: Evento): Boolean{
+        return if(col.findOne( Evento::id eq id)!= null){
+            col.updateOne(novoEvento::id eq id, set(
+                Evento::nome setTo novoEvento.nome,
+                Evento::categoria setTo novoEvento.categoria,
+                Evento::data setTo novoEvento.data,
+                Evento::horario setTo novoEvento.horario,
+                Evento::endereco setTo novoEvento.horario,
+            ))
+            true
+        }else {
+            false
+        }
     }
 
-    override fun delete() {
-        super.delete()
+    override fun delete(id: Int):Boolean{
+        return if(col.findOne( Evento::id eq id)!= null){
+            col.deleteOne(Evento::id eq id)
+            true
+        }else {
+            false
+        }
     }
 }

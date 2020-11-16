@@ -4,6 +4,7 @@ import api.base.models.usuarios.UsuarioAnunciante
 
 
 data class Evento (
+        val id: Int,
         val nome: String,
         var organizador: UsuarioAnunciante? = null,
         val categoria: String,

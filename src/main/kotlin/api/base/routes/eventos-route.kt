@@ -36,11 +36,11 @@ fun Route.eventos() {
     get(path = "/listar"){
         val repoEvento = RepoEvento()
         try {
-            map["Eventos"] = gson.toJson(repoEvento.list())
+            map["Mensagem"] = gson.toJson(repoEvento.list())
             LOG.info("Listar próximos eventos.")
         }
         catch (e: Exception) {
-            map["Eventos"] = "Erro ao consultar lista de eventos."
+            map["Mensagem"] = "Erro ao consultar lista de eventos."
             LOG.info("$e")
         }
         finally {
@@ -49,6 +49,44 @@ fun Route.eventos() {
     }
 
     patch(path = "/atualizar"){
-
+        val dados = call.receive<Evento>()
+        val repoEvento = RepoEvento()
+        val update = repoEvento.update(dados.id, dados)
+        LOG.info("Atualizar evento.")
+        if (update){
+            map["Mensagem"] = "Evento atualizado com sucesso!"
+            call.respond(HttpStatusCode.OK, gson.toJson(map))
+        }else{
+            map["Mensagem"] = "Evento id: $dados.id não encontrado!"
+            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+        }
     }
+
+    post(path = "/excluir"){
+        val id = call.receive<Int>()
+        val repoEvento = RepoEvento()
+        LOG.info("Excluir evento.")
+        val deleted: Boolean = repoEvento.delete(id)
+        if (deleted){
+            map["Mensagem"] = "Evento excluido com sucesso!!"
+            call.respond(HttpStatusCode.OK, gson.toJson(map))
+        }else {
+            map["Mensagem"] = "Evento id: $id não encontrado!"
+            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+        }
+    }
+
+    post(path = "/buscar"){
+        val repoEvento = RepoEvento()
+        val id = call.receive<Int>()
+        val busca = repoEvento.get(id)
+        LOG.info("Buscar evento.")
+        if (busca != null){
+            call.respond(HttpStatusCode.OK, gson.toJson(busca))
+        }else {
+            map["Mensagem"] = "Evento id: $id não encontrado!"
+            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+        }
+    }
+
 }
