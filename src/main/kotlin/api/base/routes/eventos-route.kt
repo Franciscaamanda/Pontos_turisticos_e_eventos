@@ -1,9 +1,9 @@
 package api.base.routes
 
 import LOG
-import api.base.controllers.evento.EventosController
+import api.base.controllers.eventos.CtrlEventos
 import api.base.models.evento.Evento
-import api.base.repository.EventoRepo
+import api.base.repository.RepoEvento
 
 import com.google.gson.Gson
 import io.ktor.application.*
@@ -19,7 +19,7 @@ fun Route.eventos() {
 
     post(path = "/criar"){
         val evento = call.receive<Evento>()
-        val novoEvento = EventosController(evento)
+        val novoEvento = CtrlEventos(evento)
         val isCreated = novoEvento.criar()
 
         if(isCreated){
@@ -34,9 +34,18 @@ fun Route.eventos() {
     }
 
     get(path = "/listar"){
-        val eventoRepo = EventoRepo()
-        map["Eventos"] = eventoRepo.getAll().toString()
-        call.respond(gson.toJson(map))
+        val repoEvento = RepoEvento()
+        try {
+            map["Eventos"] = gson.toJson(repoEvento.list())
+            LOG.info("Listar próximos eventos.")
+        }
+        catch (e: Exception) {
+            map["Eventos"] = "Erro ao consultar lista de eventos."
+            LOG.info("$e")
+        }
+        finally {
+            call.respond(map)
+        }
     }
 
     patch(path = "/atualizar"){

@@ -14,13 +14,13 @@ val mongoLogger: Unit = loggerContext.setLevel(Level.INFO)
 val LOG: Logger = LoggerFactory.getLogger("Eventos - API") as Logger
 
 val PORT = dotenv().get("PORT").toInt()
-
+val HOST = "127.0.0.1"
 
 // Levanta um servidor e redireciona a aplicação para api.base.app.kt;
 fun main(){
     embeddedServer(
         Netty,
-        port = PORT,
+        port = PORT, host = HOST,
         module = Application::main
     ).start(wait = true)
 }

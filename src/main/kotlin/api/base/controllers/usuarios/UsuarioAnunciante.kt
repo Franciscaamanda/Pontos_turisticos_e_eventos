@@ -2,24 +2,21 @@ package api.base.controllers.usuarios
 
 import api.base.controllers.cadastro.CadastroUsuarios
 import api.base.models.usuarios.UsuarioAnunciante
-import api.base.repository.UsuarioAnuncianteRepo
+import api.base.repository.RepoUsuarioAnunciante
 
 
 class UsuarioAnuncianteController(override val usuario: UsuarioAnunciante) : CadastroUsuarios {
-    val UsuarioAnuncianteRepo = UsuarioAnuncianteRepo()
+    val UsuarioAnuncianteRepo = RepoUsuarioAnunciante()
+
+
 
     override fun criar(): Boolean {
         val novoAnunciante = usuario
-        return UsuarioAnuncianteRepo.insert(novoAnunciante)
+        return UsuarioAnuncianteRepo.add(novoAnunciante)
     }
 
     override fun atualizar(): Boolean {
-        val novoPerfil = usuario
-        val pessoa = UsuarioAnuncianteRepo.get(novoPerfil.documento)
-
-        return if (pessoa != null) {
-            UsuarioAnuncianteRepo.update(novoPerfil.documento, novoPerfil)
-        } else false
+        return UsuarioAnuncianteRepo.update(usuario.documento, usuario);
     }
 
     override fun encontar(): List<Any> {
@@ -28,5 +25,8 @@ class UsuarioAnuncianteController(override val usuario: UsuarioAnunciante) : Cad
 
     override fun deletar(): Boolean {
         TODO("Not yet implemented")
+    }
+    override fun listar(): MutableList<*>{
+        return UsuarioAnuncianteRepo.list()
     }
 }

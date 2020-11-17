@@ -30,11 +30,11 @@ fun Application.main() {
             eventos()
         }
 
-        route("/usuario-comum"){
+        route("/comum"){
             usuarioComum()
         }
 
-        route("/usuario-anunciante") {
+        route("/anunciante") {
             usuarioAnunciante()
         }
     }
