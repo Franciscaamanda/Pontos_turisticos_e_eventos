@@ -19,6 +19,7 @@ compileKotlin {
 mainClassName = 'ServerKt'
 task stage {
     dependsOn installDist
+    dependsOn build
 }
 
 dependencies {
