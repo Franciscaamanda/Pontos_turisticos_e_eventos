@@ -18,59 +18,73 @@ fun Route.usuarioComum() {
     val map = hashMapOf<String, String>()
 
     post(path = "/criar"){
-        val comum = call.receive<UsuarioComum>()
-        val cadastrarComum = CtrlUsuarioComum(comum)
-        val criadoComum = cadastrarComum.criar()
+        try {
+            val comum = call.receive<UsuarioComum>()
+            val cadastrarComum = CtrlUsuarioComum(comum)
 
-        if (criadoComum){
-            map["Mensagem"] = "Usuário cadastrado com sucesso!"
-            call.respond(HttpStatusCode.Created, gson.toJson(map))
-        }else{
-            map["Mensagem"] = "Não foi possível criar o usuário."
-            call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
+            if (cadastrarComum.criar()){
+                map["Mensagem"] = "Usuário cadastrado com sucesso!"
+                call.respond(HttpStatusCode.Created, gson.toJson(map))
+            }else{
+                map["Mensagem"] = "Não foi possível criar o usuário."
+                call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
+            }
+        }catch (e:Exception){
+            call.respond(HttpStatusCode.BadRequest, gson.toJson(e.message))
         }
     }
 
     patch(path = "/atualizar"){
-        val dadosAtualizados = call.receive<UsuarioComum>()
-        val perfilComum = CtrlUsuarioComum(dadosAtualizados)
+        try {
+            val dadosAtualizados = call.receive<UsuarioComum>()
+            val perfilComum = CtrlUsuarioComum(dadosAtualizados)
 
-        if(perfilComum.encontar() == null){
-            map["Mensagem"] = "Usuário não encontrado"
+            if(perfilComum.atualizar()){
+                map["Mensagem"] = "Perfil Atualizado com sucesso!!"
+                call.respond(HttpStatusCode.OK, gson.toJson(map))
+            } else{
+                map["Mensagem"] = "Usuário inexistente!"
+                call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+            }
+        }catch (e:Exception){
+            map["Mensagem"] = "Não foi possível atualizar informações do usuário, "+e.message
             call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
-        }
-
-        if(perfilComum.atualizar()){
-            map["Mensagem"] = "Perfil Atualizado com sucesso!!"
-            call.respond(HttpStatusCode.OK, gson.toJson(map))
-        } else{
-            map["Mensagem"] = "Não foi possível atualizar informações de usuário!"
-            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
         }
     }
 
     delete(path = "/excluir"){
-        val excluir = call.receive<UsuarioComum>()
-        val pessoa = CtrlUsuarioComum(excluir)
+        try {
+            val excluir = call.receive<UsuarioComum>()
+            val pessoa = CtrlUsuarioComum(excluir)
 
-        if(pessoa.deletar()){
-            map["Mensagem"] = "Usuário deletado com sucesso!!"
-            call.respond(HttpStatusCode.OK, gson.toJson(map))
-        }else{
-            map["Mensagem"] = "Usuário inexistente!"
-            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+            if(pessoa.deletar()){
+                map["Mensagem"] = "Usuário deletado com sucesso!!"
+                call.respond(HttpStatusCode.OK, gson.toJson(map))
+            }else{
+                map["Mensagem"] = "Usuário inexistente!"
+                call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+            }
+        }catch (e:Exception){
+            map["Mensagem"] = "Não foi possível deletar o usuário, "+e.message
+            call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
         }
     }
     get (path= "/encontrar"){
-        var usuario = call.receive<UsuarioComum>()
-        val pessoa = CtrlUsuarioComum(usuario).encontar()
-        if(pessoa != null){
-            call.respond(HttpStatusCode.OK, gson.toJson(pessoa))
-        }else{
-            map["Mensagem"] = "Usuário inexistente!"
-            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+        try {
+            val usuario = call.receive<UsuarioComum>()
+            val pessoa = CtrlUsuarioComum(usuario).encontrar()
+            if(pessoa != null){
+                call.respond(HttpStatusCode.OK, gson.toJson(pessoa))
+            }else{
+                map["Mensagem"] = "Usuário inexistente!"
+                call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+            }
+        }catch (e: Exception){
+            map["Mensagem"] = "Não foi possível encontrar o usuário, "+e.message
+            call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
         }
     }
+
     get (path = "/listar" ){
         val comum = UsuarioComum("","")
         val lista = CtrlUsuarioComum(comum).listar()

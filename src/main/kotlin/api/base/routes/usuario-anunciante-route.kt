@@ -14,6 +14,7 @@ import api.base.models.usuarios.UsuarioComum
 
 import com.google.gson.Gson
 import io.ktor.application.*
+import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
@@ -27,57 +28,73 @@ fun Route.usuarioAnunciante() {
     val map = hashMapOf<String, String>()
 
     post(path = "/criar"){
-        val anunciante = call.receive<UsuarioAnunciante>()
-        val cadatrarAnunciante = CtrlUsuarioAnunciante(anunciante)
-        val criadoAnunciante = cadatrarAnunciante.criar()
+        try{
+            val anunciante = call.receive<UsuarioAnunciante>()
+            val cadastrarAnunciante = CtrlUsuarioAnunciante(anunciante)
 
-        if (criadoAnunciante){
-            map["Mensagem"] = "Anunciante cadastrado com sucesso!"
-            call.respond(HttpStatusCode.Created, gson.toJson(map))
-        }else{
-            map["Mensagem"] = "Não foi possível criar o anunciante."
-            call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
+            if (cadastrarAnunciante.criar()){
+                map["Mensagem"] = "Anunciante cadastrado com sucesso!"
+                call.respond(HttpStatusCode.Created, gson.toJson(map))
+            }else{
+                map["Mensagem"] = "Não foi possível criar o anunciante."
+                call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
+            }
+        }catch (e:Exception){
+            call.respond(HttpStatusCode.BadRequest, gson.toJson(e.message))
         }
     }
 
     patch(path = "/atualizar"){
-        val atualizar = call.receive<UsuarioAnunciante>()
-        val pessoa = CtrlUsuarioAnunciante(atualizar)
-        val novo = pessoa.atualizar()
-
-        if(novo){
-            map["Mensagem"] = "Perfil Atualizado com sucesso!!"
-            call.respond(HttpStatusCode.OK, gson.toJson(map))
-        } else{
-            map["Mensagem"] = "Não foi possível atualizar informações de usuário!"
-            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+        try{
+            val atualizar = call.receive<UsuarioAnunciante>()
+            val pessoa = CtrlUsuarioAnunciante(atualizar)
+            if(pessoa.atualizar()){
+                map["Mensagem"] = "Perfil Atualizado com sucesso!!"
+                call.respond(HttpStatusCode.OK, gson.toJson(map))
+            }else{
+                map["Mensagem"] = "Usuário inexistente!"
+                call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+            }
+        }catch (e:Exception){
+                map["Mensagem"] = "Não foi possível atualizar informações do usuário, "+e.message
+                call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
         }
     }
 
     delete(path = "/excluir"){
-        val excluir = call.receive<UsuarioAnunciante>()
-        val pessoa = CtrlUsuarioAnunciante(excluir)
-        val usuario = pessoa.deletar()
+        try{
+            val excluir = call.receive<UsuarioAnunciante>()
+            val pessoa = CtrlUsuarioAnunciante(excluir)
 
-        if(usuario){
-            map["Mensagem"] = "Usuário deletado com sucesso!!"
-            call.respond(HttpStatusCode.OK, gson.toJson(map))
-        }else{
-            map["Mensagem"] = "Usuário inexistente!"
-            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+            if(pessoa.deletar()){
+                map["Mensagem"] = "Usuário deletado com sucesso!!"
+                call.respond(HttpStatusCode.OK, gson.toJson(map))
+            }else{
+                map["Mensagem"] = "Usuário inexistente!"
+                call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+            }
+        }catch (e:Exception){
+            map["Mensagem"] = "Não foi possível deletar o usuário, "+e.message
+            call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
         }
     }
 
     get (path= "/encontrar"){
-        var usuario = call.receive<UsuarioAnunciante>()
-        val pessoa = CtrlUsuarioAnunciante(usuario).encontar()
-        if(pessoa != null){
-            call.respond(HttpStatusCode.OK, gson.toJson(pessoa))
-        }else{
-            map["Mensagem"] = "Usuário inexistente!"
-            call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+        try{
+            val usuario = call.receive<UsuarioAnunciante>()
+            val pessoa = CtrlUsuarioAnunciante(usuario).encontrar()
+            if(pessoa != null){
+                call.respond(HttpStatusCode.OK, gson.toJson(pessoa))
+            }else{
+                map["Mensagem"] = "Usuário inexistente!"
+                call.respond(HttpStatusCode.NotFound, gson.toJson(map))
+            }
+        }catch (e: Exception){
+            map["Mensagem"] = "Não foi possível encontrar o usuário, "+e.message
+            call.respond(HttpStatusCode.BadRequest, gson.toJson(map))
         }
     }
+
     get (path = "/listar" ){
         val anunciante = UsuarioAnunciante("","")
         val lista = CtrlUsuarioAnunciante(anunciante).listar()

@@ -26,7 +26,7 @@ class CtrlEventos(override val evento: Evento): ICadastroEventos {
         TODO("Not yet implemented")
     }
 
-    override fun encontar(): List<Any> {
+    override fun encontrar(): List<Any> {
         TODO("Not yet implemented")
     }
 

@@ -16,9 +16,10 @@ compileKotlin {
     }
 }
 
-mainClassName = 'api.base.ServerKt'
+mainClassName = 'ServerKt'
 task stage {
     dependsOn installDist
+    dependsOn build
 }
 
 dependencies {

@@ -28,12 +28,12 @@ class CtrlUsuarioAnunciante (override val usuario: UsuarioAnunciante) : ICadastr
         } else false
     }
 
-    override fun encontar(): UsuarioAnunciante? {
+    override fun encontrar(): UsuarioAnunciante? {
         return RepoUsuarioAnunciante.get(usuario.documento)
     }
 
     override fun deletar(): Boolean {
-       val excluir = usuario
+        val excluir = usuario
         val pessoa = excluir.documento.let { RepoUsuarioAnunciante.get(it) }
 
         return if (pessoa != null){

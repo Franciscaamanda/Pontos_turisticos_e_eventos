@@ -14,7 +14,7 @@ import api.base.models.usuarios.Usuario
 interface Cadastro {
     fun criar(): Boolean
     fun atualizar(): Boolean
-    fun encontar(): List<Any>
+    fun encontrar(): Any?
     fun deletar(): Boolean
     fun listar(): MutableList<*>
 }

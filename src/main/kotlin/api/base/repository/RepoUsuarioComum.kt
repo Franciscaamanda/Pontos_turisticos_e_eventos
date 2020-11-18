@@ -13,7 +13,7 @@ class RepoUsuarioComum: IRepoUsuarioComum, IColUsuarioComum {
         return col.insertOne(usuario).wasAcknowledged()
     }
 
-    override fun get(documento: String): Any? {
+    override fun get(documento: String): UsuarioComum? {
         return col.findOne(UsuarioComum::documento eq documento)
     }
 
