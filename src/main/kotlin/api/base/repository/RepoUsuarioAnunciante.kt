@@ -35,4 +35,5 @@ class RepoUsuarioAnunciante: IRepoUsuarioAnunciante, IColUsuarioAnunciante {
     override fun delete(documento: String): Boolean {
         return col.deleteOne(UsuarioAnunciante::documento eq documento).wasAcknowledged()
     }
+
 }

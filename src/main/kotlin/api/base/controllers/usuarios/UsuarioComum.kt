@@ -18,20 +18,15 @@ class UsuarioComumController(override val usuario: UsuarioComum) : CadastroUsuar
         return UsuarioComumRepo.update(usuario.documento, usuario)
     }
 
-    override fun encontar(): List<Any> {
-        TODO("Not yet implemented")
+    override fun encontrar(): Any? {
+        return UsuarioComumRepo.get(usuario.documento)
     }
 
     override fun deletar(): Boolean {
-        val deletar = usuario
-        val pessoa = UsuarioComumRepo.get(deletar.documento)
-
-        return if(pessoa != null){
-            UsuarioComumRepo.delete(deletar.documento)
-        } else false
+        return UsuarioComumRepo.delete(usuario.documento)
     }
 
     override fun listar(): MutableList<*> {
-        TODO("Not yet implemented")
+        return UsuarioComumRepo.list()
     }
 }
